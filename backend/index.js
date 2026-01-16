@@ -5,9 +5,10 @@ import sequelize from "./config/db.js";
 
 import clienteRoutes from "./routes/clienteRoutes.js";
 import facturaRoutes from "./routes/facturaRoutes.js";
-import facturadetalleRoutes from "./routes/facturadetalleRoutes.js"
-import impuestoRoutes from "./routes/impuestoRoutes.js"
-import productoRoutes from "./models/Producto.js";
+import facturadetalleRoutes from "./routes/facturadetalleRoutes.js";
+import impuestoRoutes from "./routes/impuestoRoutes.js";
+import productoRoutes from "./routes/productoRoutes.js";  
+import usuarioRoutes from "./routes/usuarioRoutes.js"; 
 
 dotenv.config();
 
@@ -23,8 +24,7 @@ app.use("/api/facturas", facturaRoutes);
 app.use("/api/facturadetalle", facturadetalleRoutes);
 app.use("/api/impuesto", impuestoRoutes);
 app.use("/api/producto", productoRoutes);
-
-
+app.use("/api/usuarios", usuarioRoutes);
 
 // Ruta de prueba
 app.get("/", (req, res) => res.send("Backend funcionando correctamente!"));
