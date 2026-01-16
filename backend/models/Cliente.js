@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";  // ← IMPORT CORRECTO
+import sequelize from "../config/db.js";  
 
 const Cliente = sequelize.define("Cliente", {
   id: {
@@ -11,7 +11,7 @@ const Cliente = sequelize.define("Cliente", {
     type: DataTypes.STRING,
     allowNull: false
   },
-  email: {
+  correo: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
