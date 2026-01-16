@@ -21,7 +21,7 @@ const Impuesto = sequelize.define("Impuesto", {
     defaultValue: true
   }
 }, {
-  tableName: "impuestos",
+  tableName: "configuracion_impuestos",
   timestamps: false
 });
 

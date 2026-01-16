@@ -39,7 +39,7 @@ const FacturaDetalle = sequelize.define("FacturaDetalle", {
     allowNull: false
   }
 }, {
-  tableName: "factura_detalle",
+  tableName: "detalle_factura",
   timestamps: false
 });
 
