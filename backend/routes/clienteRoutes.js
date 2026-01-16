@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 });
 
 // Crear un nuevo cliente
-router.post("/cliente", (req, res) => {
+router.post("/", (req, res) => {
   const nuevoCliente = {
     id: clientes.length + 1,
     ...req.body
