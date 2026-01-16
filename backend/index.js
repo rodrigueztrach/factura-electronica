@@ -1,28 +1,37 @@
-
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import sequelize from "./config/db.js";
 
-// Importar rutas (suponiendo que tengas rutas separadas)
 import clienteRoutes from "./routes/clienteRoutes.js";
 import facturaRoutes from "./routes/facturaRoutes.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors()); // Permite que el frontend acceda al backend
-app.use(express.json()); // Para poder recibir JSON en las peticiones
+app.use(cors());
+app.use(express.json());
 
 // Rutas
-app.use("/api/cliente", clienteRoutes);
-app.use("/api/factura", facturaRoutes);
+app.use("/api/clientes", clienteRoutes);
+app.use("/api/facturas", facturaRoutes);
 
-// Ruta principal para probar que el backend funciona
-app.get("/", (req, res) => {
-  res.send("Backend funcionando correctamente!");
-});
+// Ruta de prueba
+app.get("/", (req, res) => res.send("Backend funcionando correctamente!"));
 
-// Levantar servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Conexión a la base de datos OK!");
+    
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error al conectar a la base de datos:", error);
+  }
+};
+
+startServer();

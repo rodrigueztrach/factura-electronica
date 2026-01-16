@@ -1,6 +1,18 @@
+import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const sequelize = new Sequelize(
+  process.env.DB_NAME, 
+  process.env.DB_USER, 
+  process.env.DB_PASSWORD, 
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306,
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
-console.log("Conectando a la base de datos en:", process.env.DB_HOST);
+export default sequelize;

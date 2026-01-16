@@ -1,26 +1,24 @@
-// backend/routes/facturaRoutes.js
 import express from "express";
+import Factura from "../models/Factura.js";
+
 const router = express.Router();
 
-// Datos de prueba
-let facturas = [
-  { id: 1, clienteId: 1, total: 500 },
-  { id: 2, clienteId: 2, total: 1200 }
-];
-
-// Obtener todas las facturas
-router.get("/", (req, res) => {
-  res.json(facturas);
+router.get("/", async (req, res) => {
+  try {
+    const facturas = await Factura.findAll({ include: "Cliente" });
+    res.json(facturas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Crear una nueva factura
-router.post("/", (req, res) => {
-  const nuevaFactura = {
-    id: facturas.length + 1,
-    ...req.body
-  };
-  facturas.push(nuevaFactura);
-  res.status(201).json(nuevaFactura);
+router.post("/", async (req, res) => {
+  try {
+    const nuevaFactura = await Factura.create(req.body);
+    res.status(201).json(nuevaFactura);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router;

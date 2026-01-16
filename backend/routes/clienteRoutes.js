@@ -1,26 +1,24 @@
-// backend/routes/clienteRoutes.js
 import express from "express";
+import Cliente from "../models/Cliente.js";
+
 const router = express.Router();
 
-// Datos de prueba
-let clientes = [
-  { id: 1, nombre: "Juan Perez", email: "juan@mail.com" },
-  { id: 2, nombre: "Maria Lopez", email: "maria@mail.com" }
-];
-
-// Obtener todos los clientes
-router.get("/", (req, res) => {
-  res.json(clientes);
+router.get("/", async (req, res) => {
+  try {
+    const clientes = await Cliente.findAll();
+    res.json(clientes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Crear un nuevo cliente
-router.post("/", (req, res) => {
-  const nuevoCliente = {
-    id: clientes.length + 1,
-    ...req.body
-  };
-  clientes.push(nuevoCliente);
-  res.status(201).json(nuevoCliente);
+router.post("/", async (req, res) => {
+  try {
+    const nuevoCliente = await Cliente.create(req.body);
+    res.status(201).json(nuevoCliente);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router;
