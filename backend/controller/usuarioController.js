@@ -1,43 +1,43 @@
 import Usuario from "../models/Usuario.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-export const crearUsuario = async (req, res) => {
-  try {
-    const { nombre, email, password, rol } = req.body;
-
-    const hashed = await bcrypt.hash(password, 10);
-
-    const usuario = await Usuario.create({
-      nombre,
-      email,
-      password: hashed,
-      rol
-    });
-
-    res.status(201).json(usuario);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
 
 export const loginUsuario = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const usuario = await Usuario.findOne({ where: { email } });
-    if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Email y contraseña son requeridos" });
+    }
 
-    const match = await bcrypt.compare(password, usuario.password);
-    if (!match) return res.status(401).json({ error: "Credenciales inválidas" });
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (!usuario) {
+      return res.status(400).json({ msg: "Usuario no encontrado" });
+    }
+
+    const passwordValida = await bcrypt.compare(password, usuario.password);
+
+    if (!passwordValida) {
+      return res.status(400).json({ msg: "Contraseña incorrecta" });
+    }
 
     const token = jwt.sign(
-      { id: usuario.id, rol: usuario.rol },
-      process.env.JWT_SECRET,
+      { id: usuario.id, email: usuario.email },
+      process.env.JWT_SECRET || "SECRET_KEY",
       { expiresIn: "1d" }
     );
 
-    res.json({ token, usuario });
+    res.json({
+      msg: "Login exitoso",
+      token,
+      usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+      }
+    });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

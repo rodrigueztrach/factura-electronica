@@ -1,15 +1,13 @@
 import express from "express";
 import Usuario from "../models/Usuario.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { verificarToken } from "../middleware/authMiddleware.js";
 import { verificarRol } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-// ==========================
-// 🔐 REGISTRO DE USUARIO
-// ==========================
+
 router.post("/register", async (req, res) => {
   try {
     const { nombre, email, password, rol } = req.body;
@@ -32,9 +30,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// ==========================
-// 🔐 LOGIN
-// ==========================
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
