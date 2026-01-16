@@ -24,7 +24,7 @@ const Usuario = sequelize.define("Usuario", {
     allowNull: false
   },
   rol: {
-    type: DataTypes.ENUM("admin", "usuario"), // puedes agregar más roles si quieres
+    type: DataTypes.ENUM("admin", "usuario"), //rol que se le asignen al usuario
     allowNull: false,
     defaultValue: "usuario"
   },
