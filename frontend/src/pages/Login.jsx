@@ -12,10 +12,17 @@ export default function Login() {
   const manejarSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/usuarios/login", { email, password });
-      login(res.data.token); // Guarda token y redirige
+      const res = await api.post("/usuarios/login", {
+        email: email.trim(),
+        password: password.trim(),
+      });
+
+      // Guardar token y redirigir
+      login(res.token);
+      navigate("/dashboard"); // o la ruta principal de tu app
     } catch (err) {
       alert("Credenciales incorrectas");
+      console.error(err);
     }
   };
 

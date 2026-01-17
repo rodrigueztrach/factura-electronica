@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api"; // Backend corre en 3000
+const API_URL = "http://localhost:5000/api"; 
 
 const api = {
   get: async (url, token) => {
@@ -9,7 +9,9 @@ const api = {
       }
     });
 
-    return res.json();
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.msg || "Error en la petición GET");
+    return result;
   },
 
   post: async (url, data, token) => {
@@ -22,7 +24,9 @@ const api = {
       body: JSON.stringify(data)
     });
 
-    return res.json();
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.msg || "Error en la petición POST");
+    return result;
   }
 };
 

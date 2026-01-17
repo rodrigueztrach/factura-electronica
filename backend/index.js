@@ -1,58 +1,25 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
 import sequelize from "./config/db.js";
-
-// Rutas
 import authRoutes from "./routes/authRoutes.js";
-import clienteRoutes from "./routes/clienteRoutes.js";
-import facturaRoutes from "./routes/facturaRoutes.js";
-import facturadetalleRoutes from "./routes/facturadetalleRoutes.js";
-import impuestoRoutes from "./routes/impuestoRoutes.js";
-import productoRoutes from "./routes/productoRoutes.js";
-import usuarioRoutes from "./routes/usuarioRoutes.js";
 
 dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
 
+// Rutas
+app.use("/api/usuarios", authRoutes);
 
-// RUTAS API
+// Probar conexión y sincronizar tabla
+sequelize.authenticate()
+  .then(() => console.log("Conexión a DB OK"))
+  .catch(err => console.error("Error conexión DB", err));
 
+sequelize.sync({ alter: true })
+  .then(() => console.log("Tablas sincronizadas"))
+  .catch(err => console.error(err));
 
-//Ruta de LOGIN
-app.use("/api/auth", authRoutes);
-
-// Rutas del sistema
-app.use("/api/clientes", clienteRoutes);
-app.use("/api/facturas", facturaRoutes);
-app.use("/api/facturadetalle", facturadetalleRoutes);
-app.use("/api/impuesto", impuestoRoutes);
-app.use("/api/producto", productoRoutes);
-app.use("/api/usuarios", usuarioRoutes);
-
-// Ruta de prueba
-app.get("/", (req, res) => res.send("Backend funcionando correctamente!"));
-
-// ===========================
-//   INICIAR SERVIDOR
-// ===========================
-const startServer = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Conexión a la base de datos OK!");
-
-    app.listen(PORT, () => {
-      console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    });
-    
-  } catch (error) {
-    console.error("Error al conectar a la base de datos:", error);
-  }
-};
-
-startServer();
+// Iniciar servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

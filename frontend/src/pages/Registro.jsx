@@ -12,7 +12,6 @@ export default function Registro() {
   const manejarRegistro = async (e) => {
     e.preventDefault();
 
-    // Validación local de campos
     if (!nombre || !email || !password || !confirmPassword) {
       alert("Por favor completa todos los campos");
       return;
@@ -24,32 +23,22 @@ export default function Registro() {
     }
 
     try {
-      // Enviar datos al backend (endpoint correcto)
       await api.post("/usuarios/register", {
-        nombre,
-        email,
-        password,
+        nombre: nombre.trim(),
+        email: email.trim(),
+        password: password.trim(),
       });
 
-      // Mostrar mensaje y redirigir a login
       alert("Registro exitoso. Ahora inicia sesión.");
       navigate("/login");
     } catch (err) {
-      // Manejo seguro de errores
-      if (err.response && err.response.data && err.response.data.msg) {
-        alert("Error: " + err.response.data.msg);
-      } else {
-        alert("Error: no se pudo registrar");
-        console.error(err);
-      }
+      alert("Error: " + err.message);
+      console.error(err);
     }
   };
 
   return (
-    <form
-      onSubmit={manejarRegistro}
-      style={{ maxWidth: "300px", margin: "auto" }}
-    >
+    <form onSubmit={manejarRegistro} style={{ maxWidth: "300px", margin: "auto" }}>
       <h2>Crear Cuenta</h2>
 
       <input
