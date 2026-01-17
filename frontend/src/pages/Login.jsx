@@ -1,19 +1,19 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const manejarSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 🔥 Ruta corregida: ahora coincide con tu backend
       const res = await api.post("/usuarios/login", { email, password });
-
-      login(res.data.token); // Guarda token en contexto
+      login(res.data.token); // Guarda token y redirige
     } catch (err) {
       alert("Credenciales incorrectas");
     }
@@ -38,6 +38,14 @@ export default function Login() {
       />
 
       <button type="submit">Entrar</button>
+
+      <button
+        type="button"
+        onClick={() => navigate("/registro")}
+        style={{ marginTop: "10px" }}
+      >
+        Crear nuevo usuario
+      </button>
     </form>
   );
 }

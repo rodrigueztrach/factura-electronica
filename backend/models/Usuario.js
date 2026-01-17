@@ -24,9 +24,9 @@ const Usuario = sequelize.define("Usuario", {
     allowNull: false
   },
   rol: {
-    type: DataTypes.ENUM("admin", "usuario"), //rol que se le asignen al usuario
+    type: DataTypes.ENUM("admin", "empleado"), 
     allowNull: false,
-    defaultValue: "usuario"
+    defaultValue: "empleado"
   },
   fecha_creacion: {
     type: DataTypes.DATE,
